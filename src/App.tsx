@@ -7,7 +7,7 @@ import BurgerMenu from "./BurgerMenu";
 const Header: React.FC = () => {
   const [isEnglish, setIsEnglish] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false); // состояние скролла
+  const [isScrolled, setIsScrolled] = useState(false);
   const { width } = useViewport();
   const languages = [
     { value: "RU", label: "RU" },
@@ -17,12 +17,13 @@ const Header: React.FC = () => {
   ];
 
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(languages.find(
-      (language) => language.value === event.target.value
-    )!);
+  const handleLanguageChange = (language: { value: string; label: string }) => {
+    setSelectedLanguage(language);
+    setIsDropdownOpen(false);
   };
+
   const toggleLanguage = () => {
     setIsEnglish(!isEnglish);
   };
@@ -59,18 +60,22 @@ const Header: React.FC = () => {
       className="header"
       initial={{ backgroundColor: "transparent" }}
       animate={{
-        backgroundColor: !isMobile &&isScrolled ? "#fff" : "transparent",
+        backgroundColor: !isMobile && isScrolled ? "#fff" : "transparent",
         color: isScrolled ? "#000" : "#fff",
         transition: { duration: 0.5 },
       }}
       style={{ position: "fixed", width: "100%", top: 0, zIndex: 1000 }}
     >
-      <motion.div className="header__container" animate={{
-                    transition: { duration: 0.5 },
-                    backgroundColor:  isScrolled ? "#fff" : "transparent",
-                  }}>
+      <motion.div
+        className="header__container"
+        animate={{
+          transition: { duration: 0.5 },
+          backgroundColor: isScrolled ? "#fff" : "transparent",
+        }}
+      >
         {!isMobile && (
           <>
+            {/* Логотип и навигация на десктопе */}
             <motion.div
               className="header__logo"
               initial={{ opacity: 0 }}
@@ -93,36 +98,54 @@ const Header: React.FC = () => {
             </motion.div>
 
             <div className="header__navigation">
-              <ul style={{
-                    backgroundColor: isScrolled ? "#fff" : "transparent",
-                  }}>
+              <ul
+                style={{
+                  backgroundColor: isScrolled ? "#fff" : "transparent",
+                }}
+              >
                 {navigationLinks.map((link, index) => (
-                  <li key={index} >
-                    <a href="#" style={{
-                    color: isScrolled ? "#000" : "#fff",
-                  }}>{link}</a>
+                  <li key={index}>
+                    <a
+                      href="#"
+                      style={{
+                        color: isScrolled ? "#000" : "#fff",
+                      }}
+                    >
+                      {link}
+                    </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <motion.div className="header__right" animate={{
-                    transition: { duration: 0.5 },
-                    backgroundColor: isScrolled ? "#fff" : "transparent",
-                  }}>
-              <motion.button className="header__button" animate={{
-                    transition: { duration: 0.5 },
-                    color: isScrolled ? "#000" : "#fff",
-                    backgroundColor: isScrolled ? "#fff" : "transparent",
-                    borderColor: isScrolled ? "#000" : "#fff",
-                  }}>
+            <motion.div
+              className="header__right"
+              animate={{
+                transition: { duration: 0.5 },
+                backgroundColor: isScrolled ? "#fff" : "transparent",
+              }}
+            >
+              <motion.button
+                className="header__button"
+                animate={{
+                  transition: { duration: 0.5 },
+                  color: isScrolled ? "#000" : "#fff",
+                  backgroundColor: isScrolled ? "#fff" : "transparent",
+                  borderColor: isScrolled ? "#000" : "#fff",
+                }}
+              >
                 {isEnglish ? "BOOK ME" : "ЗАБРОНИРОВАТЬ"}
               </motion.button>
-              <motion.div className="header__phone" animate={{
-                    transition: { duration: 0.5 },
-                    color: isScrolled ? "#000" : "#fff",
-                    backgroundColor: isScrolled ? "#fff" : "transparent",
-                  }}>+7 (495) 225-81-81</motion.div>
+              <motion.div
+                className="header__phone"
+                animate={{
+                  transition: { duration: 0.5 },
+                  color: isScrolled ? "#000" : "#fff",
+                  backgroundColor: isScrolled ? "#fff" : "transparent",
+                }}
+              >
+                +7 (495) 225-81-81
+              </motion.div>
               <motion.button
                 onClick={toggleLanguage}
                 className="header__language-button"
@@ -140,28 +163,39 @@ const Header: React.FC = () => {
 
         {isMobile && (
           <>
-            {!isMenuOpen && <div className="header__mobile-language-select">
-              <select
-                value={selectedLanguage.value}
-                onChange={handleLanguageChange}
-              >
-                {languages.map((language) => (
-                  <option key={language.value} value={language.value} style={{border: 'none', padding: "10px"}}>
-                    {language.label}
-                  </option>
-                ))}
-              </select>
-            </div>}
+            {!isMenuOpen && (
+              <div className="header__mobile-language-select">
+                <div
+                  className="language-select"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  {selectedLanguage.label}
+                </div>
+                {isDropdownOpen && (
+                  <div className="language-options">
+                    {languages.map((language) => (
+                      <div
+                        key={language.value}
+                        className="language-option"
+                        onClick={() => handleLanguageChange(language)}
+                      >
+                        {language.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
-            <BurgerMenu
-              toggleMenu={toggleMenu}
-              isMobileOpen={isMenuOpen}
-            />
+            <BurgerMenu toggleMenu={toggleMenu} isMobileOpen={isMenuOpen} />
           </>
         )}
 
         {isMobile && isMenuOpen && (
-          <div className="header__mobile-menu" style={{ display: isMenuOpen ? "flex" : "none" }}>
+          <div
+            className="header__mobile-menu"
+            style={{ display: isMenuOpen ? "flex" : "none" }}
+          >
             <motion.ul
               initial="hidden"
               animate="visible"
@@ -176,31 +210,53 @@ const Header: React.FC = () => {
               }}
             >
               {navigationLinks.map((link, index) => (
-                <motion.li
-                  key={index}
-                  style={{ background: "inherit" }}
-                >
-                  <a href="#" style={{ background: "inherit", color: "#fff", textDecoration: "none", textTransform: "uppercase" }}>
+                <motion.li key={index} style={{ background: "inherit" }}>
+                  <a
+                    href="#"
+                    style={{
+                      background: "inherit",
+                      color: "#fff",
+                      textDecoration: "none",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {link}
                   </a>
                 </motion.li>
               ))}
 
               <motion.li style={{ background: "inherit" }}>
-                <button className="header__button" style={{ background: "inherit", marginRight: "0", border: "none", fontSize: "32px" }}>
+                <button
+                  className="header__button"
+                  style={{
+                    background: "inherit",
+                    marginRight: "0",
+                    border: "none",
+                    fontSize: "32px",
+                  }}
+                >
                   {isEnglish ? "BOOK ME" : "ЗАБРОНИРОВАТЬ"}
                 </button>
               </motion.li>
 
               <motion.li style={{ background: "inherit" }}>
-                <div className="header__phone" style={{ background: "inherit", marginRight: "0" }}>+7 (495) 225-81-81</div>
+                <div
+                  className="header__phone"
+                  style={{ background: "inherit", marginRight: "0" }}
+                >
+                  +7 (495) 225-81-81
+                </div>
               </motion.li>
 
               <motion.li style={{ background: "inherit" }}>
                 <button
                   onClick={toggleLanguage}
                   className="header__language-button"
-                  style={{ background: "inherit", marginRight: "0", fontSize: "32px" }}
+                  style={{
+                    background: "inherit",
+                    marginRight: "0",
+                    fontSize: "32px",
+                  }}
                 >
                   {languageButtonText}
                 </button>

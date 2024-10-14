@@ -139,17 +139,38 @@
       left: 20px;
       top: 20px;
       z-index: 1000;
-     }
+    }
     
-     .header__mobile-language-select select {
+    .language-select {
       color: #fff;
       border: 1px solid #fff;
       padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
       border-radius: 50%;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-     }
+      cursor: pointer;
+    }
+    
+    .language-options {
+      position: absolute;
+      top: 50px;
+      color: #fff;
+      border-radius: 8px;
+      width: max-content;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    
+    .language-option {
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    
+    .language-option:hover {
+      background-color: #f0f0f0;
+      color: #000;
+    }
+    
   }
   
