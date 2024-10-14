@@ -30,12 +30,14 @@
  
  .header__navigation li {
    margin-left: 20px;
+   background-color: inherit;
  }
  
  .header__navigation a {
    text-decoration: none;
    color: #fff;
    text-transform: uppercase;
+   background-color: inherit;
  }
  
  .header__right {
