@@ -46,7 +46,7 @@ const Header: React.FC = () => {
       className="header"
       initial={{ backgroundColor: "transparent" }}
       animate={{
-        backgroundColor: isScrolled ? "#fff" : "transparent",
+        backgroundColor: !isMobile &&isScrolled ? "#fff" : "transparent",
         color: isScrolled ? "#000" : "#fff",
         transition: { duration: 0.5 },
       }}
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
     >
       <motion.div className="header__container" animate={{
                     transition: { duration: 0.5 },
-                    backgroundColor: isScrolled ? "#fff" : "transparent",
+                    backgroundColor:  isScrolled ? "#fff" : "transparent",
                   }}>
         {!isMobile && (
           <>
