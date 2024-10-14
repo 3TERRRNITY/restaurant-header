@@ -9,7 +9,20 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false); // состояние скролла
   const { width } = useViewport();
+  const languages = [
+    { value: "RU", label: "RU" },
+    { value: "EN", label: "EN" },
+    { value: "AR", label: "AR" },
+    { value: "CH", label: "CH" },
+  ];
 
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(languages.find(
+      (language) => language.value === event.target.value
+    )!);
+  };
   const toggleLanguage = () => {
     setIsEnglish(!isEnglish);
   };
@@ -125,7 +138,27 @@ const Header: React.FC = () => {
           </>
         )}
 
-        {isMobile && <BurgerMenu isMobileOpen={isMenuOpen} toggleMenu={toggleMenu} />}
+        {isMobile && (
+          <>
+            {!isMenuOpen && <div className="header__mobile-language-select">
+              <select
+                value={selectedLanguage.value}
+                onChange={handleLanguageChange}
+              >
+                {languages.map((language) => (
+                  <option key={language.value} value={language.value} style={{border: 'none', padding: "10px"}}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
+            </div>}
+
+            <BurgerMenu
+              toggleMenu={toggleMenu}
+              isMobileOpen={isMenuOpen}
+            />
+          </>
+        )}
 
         {isMobile && isMenuOpen && (
           <div className="header__mobile-menu" style={{ display: isMenuOpen ? "flex" : "none" }}>

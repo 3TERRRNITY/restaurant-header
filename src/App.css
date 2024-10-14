@@ -134,5 +134,22 @@
     padding: 0;
    }
 
+   .header__mobile-language-select {
+      position: fixed;
+      left: 20px;
+      top: 20px;
+      z-index: 1000;
+     }
+    
+     .header__mobile-language-select select {
+      color: #fff;
+      border: 1px solid #fff;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 50%;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+     }
   }
   
